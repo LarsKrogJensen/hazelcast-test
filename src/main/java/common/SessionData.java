@@ -17,7 +17,7 @@ public class SessionData implements Serializable {
         this.expires = expires;
     }
 
-    public String getId() {
+    String getId() {
         return id;
     }
 
@@ -25,7 +25,7 @@ public class SessionData implements Serializable {
         return expires;
     }
 
-    public void put(String key, Object value) {
+    void put(String key, Object value) {
         attributes.put(key, value);
     }
 
@@ -33,16 +33,20 @@ public class SessionData implements Serializable {
         return attributes.get(key);
     }
 
-    public static SessionData create(int punterId, int multiplier) {
+    static SessionData create(int punterId, int multiplier) {
         SessionData sessionData = new SessionData(composeSessionId(punterId, multiplier), 1234567L);
         sessionData.put("someData", new SomeData());
         sessionData.put("otherData", new OtherData());
-        sessionData.put(ROUTING_KEY, "routingKey-" + punterId);
+        sessionData.put(ROUTING_KEY, composeRoutingKey(punterId, multiplier));
         sessionData.put(PUNTER_ID_KEY, punterId);
         return sessionData;
     }
 
-    public static String composeSessionId(int punterId, int multiplier) {
-         return "session-" + punterId + "-" + multiplier;
+    static String composeSessionId(int punterId, int multiplier) {
+        return "session-" + punterId + "-" + multiplier;
+    }
+
+    static String composeRoutingKey(int punterId, int multiplier) {
+        return "routingKey-" + punterId + "-" + multiplier;
     }
 }
