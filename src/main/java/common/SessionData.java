@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class SessionData implements Serializable {
     public final static String PUNTER_ID_KEY = "punterId";
-    public final static String ROUTING_KEY = "routingKey";
+    public final static String ROUTING_KEY_KEY = "routingKey";
 
     private final String id;
     private final long expires;
@@ -37,7 +37,7 @@ public class SessionData implements Serializable {
         SessionData sessionData = new SessionData(composeSessionId(punterId, multiplier), 1234567L);
         sessionData.put("someData", new SomeData());
         sessionData.put("otherData", new OtherData());
-        sessionData.put(ROUTING_KEY, composeRoutingKey(punterId, multiplier));
+        sessionData.put(ROUTING_KEY_KEY, composeRoutingKey(punterId, multiplier));
         sessionData.put(PUNTER_ID_KEY, punterId);
         return sessionData;
     }
