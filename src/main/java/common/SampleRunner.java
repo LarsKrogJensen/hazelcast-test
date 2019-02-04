@@ -60,7 +60,6 @@ public class SampleRunner implements Runnable {
                 } else {
                     System.err.println("Bad command");
                 }
-
             }
         }
     }
