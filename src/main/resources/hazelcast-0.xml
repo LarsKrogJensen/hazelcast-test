@@ -13,12 +13,12 @@
     <management-center enabled="false">http://localhost:8080/mancenter</management-center>
     <serialization>
         <serializers>
-            <global-serializer override-java-serialization="true">
-                common.KryoSerializer2
-            </global-serializer>
             <!--<global-serializer override-java-serialization="true">-->
-                <!--common.KryoSerializer-->
+                <!--common.KryoSerializer2-->
             <!--</global-serializer>-->
+            <global-serializer override-java-serialization="true">
+                common.HazelcastKryoSerializer
+            </global-serializer>
             <!--<global-serializer override-java-serialization="true">-->
                 <!--info.jerrinot.subzero.Serializer-->
             <!--</global-serializer>-->

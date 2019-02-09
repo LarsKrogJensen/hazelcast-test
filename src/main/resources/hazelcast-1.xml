@@ -1,0 +1,104 @@
+<!--suppress XmlDefaultAttributeValue -->
+<hazelcast xmlns="http://www.hazelcast.com/schema/config"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://www.hazelcast.com/schema/config
+           http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd">
+    <group>
+        <name>dev</name>
+    </group>
+    <properties>
+        <property name="hazelcast.logging.type">slf4j</property>
+        <property name="hazelcast.index.copy.behavior">NEVER</property>
+    </properties>
+    <management-center enabled="false">http://localhost:8080/mancenter</management-center>
+    <serialization>
+        <serializers>
+            <!--<global-serializer override-java-serialization="true">-->
+                <!--common.KryoSerializer2-->
+            <!--</global-serializer>-->
+            <global-serializer override-java-serialization="true">
+                common.HazelcastKryoSerializer
+            </global-serializer>
+            <!--<global-serializer override-java-serialization="true">-->
+                <!--info.jerrinot.subzero.Serializer-->
+            <!--</global-serializer>-->
+            <!--<serializer class-name="common.SessionData" type-class="common.KryoSerializer"/>-->
+       </serializers>
+    </serialization>
+    <network>
+        <port auto-increment="true" port-count="100">5701</port>
+        <outbound-ports>
+            <!--
+            Allowed port range when connecting to other members.
+            0 or * means the port provided by the system.
+            -->
+            <ports>0</ports>
+        </outbound-ports>
+        <join>
+            <multicast enabled="true">
+                <multicast-group>224.2.2.3</multicast-group>
+                <multicast-port>54327</multicast-port>
+            </multicast>
+
+        </join>
+    </network>
+
+    <map name="binaryInMemory">
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <in-memory-format>BINARY</in-memory-format>
+        <backup-count>1</backup-count>
+        <eviction-policy>NONE</eviction-policy>
+    </map>
+    <map name="objectInMemory">
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <in-memory-format>OBJECT</in-memory-format>
+        <backup-count>1</backup-count>
+        <eviction-policy>NONE</eviction-policy>
+    </map>
+
+    <map name="binaryInMemoryWithExtractor">
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <in-memory-format>BINARY</in-memory-format>
+        <backup-count>1</backup-count>
+        <eviction-policy>NONE</eviction-policy>
+        <attributes>
+            <attribute extractor="common.PunterIdExtractor">punterId</attribute>
+        </attributes>
+    </map>
+
+    <map name="objectInMemoryWithExtractor">
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <in-memory-format>OBJECT</in-memory-format>
+        <backup-count>1</backup-count>
+        <eviction-policy>NONE</eviction-policy>
+        <attributes>
+            <attribute extractor="common.PunterIdExtractor">punterId</attribute>
+        </attributes>
+    </map>
+
+    <map name="binaryInMemoryIndexedWithExtractor">
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <in-memory-format>BINARY</in-memory-format>
+        <backup-count>1</backup-count>
+        <eviction-policy>NONE</eviction-policy>
+        <attributes>
+            <attribute extractor="common.PunterIdExtractor">punterId</attribute>
+        </attributes>
+        <indexes>
+            <index ordered="false">punterId</index>
+        </indexes>
+    </map>
+
+    <map name="objectInMemoryIndexedWithExtractor">
+        <time-to-live-seconds>0</time-to-live-seconds>
+        <in-memory-format>OBJECT</in-memory-format>
+        <backup-count>1</backup-count>
+        <eviction-policy>NONE</eviction-policy>
+        <attributes>
+            <attribute extractor="common.PunterIdExtractor">punterId</attribute>
+        </attributes>
+        <indexes>
+            <index ordered="false">punterId</index>
+        </indexes>
+    </map>
+</hazelcast>

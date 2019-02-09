@@ -1,5 +1,7 @@
 package common;
 
+import com.hazelcast.config.ClasspathXmlConfig;
+import com.hazelcast.config.Config;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 
@@ -26,7 +28,8 @@ public class SampleRunner implements Runnable {
 
     public SampleRunner(String mapName, int node, IQueryProvider provider) {
         this.provider = provider;
-        this.hazelcast = newHazelcastInstance();
+        Config cfg = new ClasspathXmlConfig("hazelcast-0.xml");
+        this.hazelcast = newHazelcastInstance(cfg);
         this.map = hazelcast.getMap(mapName);
         this.node = node;
         System.out.println("InMemoryFormat: " + hazelcast.getConfig().findMapConfig(mapName).getInMemoryFormat());
