@@ -8,13 +8,16 @@ public class SessionData implements Serializable {
     public final static String PUNTER_ID_KEY = "punterId";
     public final static String ROUTING_KEY = "routingKey";
 
-    private final String id;
-    private final long expires;
+    private String id;
+    private long expires;
     private final Map<String, Object> attributes = new HashMap<>();
 
     public SessionData(String id, long expires) {
         this.id = id;
         this.expires = expires;
+    }
+
+    public SessionData() {
     }
 
     String getId() {
@@ -33,7 +36,7 @@ public class SessionData implements Serializable {
         return attributes.get(key);
     }
 
-    static SessionData create(int punterId, int multiplier) {
+    public static SessionData create(int punterId, int multiplier) {
         SessionData sessionData = new SessionData(composeSessionId(punterId, multiplier), 1234567L);
         sessionData.put("someData", new SomeData());
         sessionData.put("otherData", new OtherData());

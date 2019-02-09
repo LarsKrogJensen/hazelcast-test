@@ -1,8 +1,9 @@
 package common;
 
-import java.io.Serializable;
+import java.io.*;
 
 public class SomeData implements Serializable {
+//public class SomeData implements Externalizable {
     private int x = 10;
     private int y = 10;
     private int z = 10;
@@ -63,4 +64,36 @@ public class SomeData implements Serializable {
     public String getrStr() {
         return rStr;
     }
+
+//    @Override
+//    public void writeExternal(ObjectOutput out) throws IOException {
+//        out.writeUTF(xStr);
+//        out.writeUTF(yStr);
+//        out.writeUTF(zStr);
+//        out.writeUTF(vStr);
+//        out.writeUTF(bStr);
+//        out.writeUTF(aStr);
+//        out.writeUTF(rStr);
+//        out.writeInt(x);
+//        out.writeInt(y);
+//        out.writeInt(z);
+//        out.writeInt(k);
+//        out.writeInt(l);
+//    }
+//
+//    @Override
+//    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+//        xStr = in.readUTF();
+//        yStr = in.readUTF();
+//        zStr = in.readUTF();
+//        vStr = in.readUTF();
+//        bStr = in.readUTF();
+//        aStr = in.readUTF();
+//        rStr = in.readUTF();
+//        x = in.readInt();
+//        y = in.readInt();
+//        z = in.readInt();
+//        k = in.readInt();
+//        l = in.readInt();
+//    }
 }
