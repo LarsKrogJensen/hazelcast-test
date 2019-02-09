@@ -17,13 +17,13 @@
             <!--<global-serializer override-java-serialization="true">-->
                 <!--common.KryoSerializer2-->
             <!--</global-serializer>-->
-            <global-serializer override-java-serialization="true">
-                common.HazelcastKryoSerializer
-            </global-serializer>
+            <!--<global-serializer override-java-serialization="true">-->
+                <!--common.GlobalHazelcastKryoSerializer-->
+            <!--</global-serializer>-->
             <!--<global-serializer override-java-serialization="true">-->
                 <!--info.jerrinot.subzero.Serializer-->
             <!--</global-serializer>-->
-            <!--<serializer class-name="common.SessionData" type-class="common.KryoSerializer"/>-->
+            <serializer type-class="common.SessionData" class-name="common.SessionDataSerializer" />
        </serializers>
     </serialization>
     <network>

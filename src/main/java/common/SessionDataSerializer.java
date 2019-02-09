@@ -3,7 +3,6 @@ package common;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
-import com.esotericsoftware.kryo.util.DefaultInstantiatorStrategy;
 import com.esotericsoftware.kryo.util.Pool;
 import com.hazelcast.nio.ObjectDataInput;
 import com.hazelcast.nio.ObjectDataOutput;
@@ -14,8 +13,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-public class HazelcastKryoSerializer implements StreamSerializer<Object> {
-
+public class SessionDataSerializer implements StreamSerializer<SessionData> {
+    // Kryo is not thread safe, therefore we pool the resources needed.
     private final Pool<KryoContext> pool = new Pool<>(true, false, 8) {
         @Override
         protected KryoContext create() {
@@ -23,16 +22,16 @@ public class HazelcastKryoSerializer implements StreamSerializer<Object> {
         }
     };
 
-    public HazelcastKryoSerializer() {
+    public SessionDataSerializer() {
     }
 
     @Override
     public int getTypeId() {
-        return 312791;
+        return 99090;
     }
 
     @Override
-    public void write(ObjectDataOutput dataOutput, Object object) {
+    public void write(ObjectDataOutput dataOutput, SessionData object) {
         var context = pool.obtain();
 
         try {
@@ -40,7 +39,7 @@ public class HazelcastKryoSerializer implements StreamSerializer<Object> {
             var output = context.output;
 
             output.setOutputStream((OutputStream) dataOutput);
-            kryo.writeClassAndObject(output, object);
+            kryo.writeObject(output, object);
             output.flush();
         } finally {
             pool.free(context);
@@ -49,13 +48,13 @@ public class HazelcastKryoSerializer implements StreamSerializer<Object> {
     }
 
     @Override
-    public Object read(ObjectDataInput dataInput) {
+    public SessionData read(ObjectDataInput dataInput) {
         var context = pool.obtain();
         try {
             var kryo = context.kryo;
             var input = context.input;
             input.setInputStream((InputStream) dataInput);
-            return kryo.readClassAndObject(input);
+            return kryo.readObject(input, SessionData.class);
         } finally {
             pool.free(context);
         }
@@ -78,8 +77,8 @@ public class HazelcastKryoSerializer implements StreamSerializer<Object> {
             kryo.register(SomeData.class);
             kryo.register(OtherData.class);
             kryo.register(HashMap.class);
-            // by passes constructors
-            kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
+            // by passes constructors, this improvs perf but assumes no construcutor logic
+            kryo.setInstantiatorStrategy(new StdInstantiatorStrategy());
             input = new Input(BUFFER_SIZE);
             output = new Output(BUFFER_SIZE, -1); // -1 -> allow grow buffer
         }
