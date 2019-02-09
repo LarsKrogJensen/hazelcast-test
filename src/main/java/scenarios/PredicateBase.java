@@ -9,7 +9,7 @@ import common.SessionData;
 
 import java.util.Collection;
 
-import static common.SessionData.ROUTING_KEY;
+import static common.SessionData.ROUTING_KEY_KEY;
 import static java.util.stream.Collectors.toList;
 
 public class PredicateBase implements IQueryProvider {
@@ -19,7 +19,7 @@ public class PredicateBase implements IQueryProvider {
         Predicate predicate = e.get("punterId").equal(punterId);
 
         return map.values(predicate).stream()
-                .map(sd -> sd.get(ROUTING_KEY).toString())
+                .map(sd -> sd.get(ROUTING_KEY_KEY).toString())
                 .collect(toList());
     }
 }

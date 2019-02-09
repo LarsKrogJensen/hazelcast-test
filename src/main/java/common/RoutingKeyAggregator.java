@@ -20,7 +20,7 @@ public class RoutingKeyAggregator extends Aggregator<Map.Entry<String, SessionDa
     @Override
     public void accumulate(Map.Entry<String, SessionData> input) {
          if ((Integer)input.getValue().get(SessionData.PUNTER_ID_KEY) == punterId) {
-             sessionData.add(input.getValue().get(SessionData.ROUTING_KEY).toString());
+             sessionData.add(input.getValue().get(SessionData.ROUTING_KEY_KEY).toString());
          }
     }
 

@@ -34,6 +34,12 @@ public class SampleRunner implements Runnable {
 
     public void run() {
         Scanner scanner = new Scanner(System.in);
+        System.out.println("* Commands");
+        System.out.println("populate           - Populate cache with data");
+        System.out.println("size               - Current size");
+        System.out.println("rk punterId        - Find routing keys for punter");
+        System.out.println("pk punterId [0|1]  - Find session by primary key, 2 sessions created for each punterId");
+
         while (true) {
             System.out.println("Enter command:");
             String next = scanner.nextLine();
@@ -42,8 +48,8 @@ public class SampleRunner implements Runnable {
             if (command.length > 0) {
                 if (command[0].equalsIgnoreCase("rk") && command.length == 2) {
                     queryRoutingKey(command[1]);
-                } else if (command[0].equalsIgnoreCase("pk") && command.length == 3) {
-                    queryPrimaryKey(command[1], command[2]);
+                } else if (command[0].equalsIgnoreCase("pk") && command.length >= 2) {
+                    queryPrimaryKey(command[1], command.length == 3 ? command[2] : "0");
                 } else if (command[0].equalsIgnoreCase("quit")) {
                     hazelcast.shutdown();
                     break;
@@ -54,7 +60,6 @@ public class SampleRunner implements Runnable {
                 } else {
                     System.err.println("Bad command");
                 }
-
             }
         }
     }
