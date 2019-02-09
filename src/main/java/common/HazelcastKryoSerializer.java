@@ -78,6 +78,7 @@ public class HazelcastKryoSerializer implements StreamSerializer<Object> {
             kryo.register(SomeData.class);
             kryo.register(OtherData.class);
             kryo.register(HashMap.class);
+            // by passes constructors
             kryo.setInstantiatorStrategy(new DefaultInstantiatorStrategy(new StdInstantiatorStrategy()));
             input = new Input(BUFFER_SIZE);
             output = new Output(BUFFER_SIZE, -1); // -1 -> allow grow buffer
