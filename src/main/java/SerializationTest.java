@@ -1,13 +1,16 @@
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Output;
+import com.hazelcast.config.SerializationConfig;
+import com.hazelcast.config.SerializerConfig;
+import com.hazelcast.internal.serialization.impl.DefaultSerializationServiceBuilder;
+import com.hazelcast.nio.serialization.Data;
+import com.hazelcast.spi.serialization.SerializationService;
 import common.OtherData;
 import common.SessionData;
+import common.SessionDataSerializer;
 import common.SomeData;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.zip.GZIPOutputStream;
 
@@ -18,6 +21,7 @@ public class SerializationTest {
         javaSerializationWithCompression();
         kryoSerialization();
         kryoSerializationCompressed();
+        hazelcastSerialization();
     }
 
     private static void kryoSerialization() throws FileNotFoundException {
@@ -70,5 +74,23 @@ public class SerializationTest {
         objectOutputStream.writeObject(sessionData);
         objectOutputStream.flush();
         objectOutputStream.close();
+    }
+
+    private static void hazelcastSerialization() throws IOException {
+        SerializerConfig serializerConfig = new SerializerConfig();
+        serializerConfig.setTypeClass(SessionData.class);
+        serializerConfig.setImplementation(new SessionDataSerializer());
+
+        SerializationConfig serializationConfig = new SerializationConfig();
+        serializationConfig.addSerializerConfig(serializerConfig);
+
+        SessionData sessionData = SessionData.create(1, 2);
+        SerializationService ss = new DefaultSerializationServiceBuilder().setConfig(serializationConfig).build();
+        Data data = ss.toData(sessionData);
+        byte[] bytes = data.toByteArray();
+        FileOutputStream fileOutputStream = new FileOutputStream("hazelcast_serialization.bin");
+        fileOutputStream.write(bytes);
+        fileOutputStream.flush();
+        fileOutputStream.close();
     }
 }
