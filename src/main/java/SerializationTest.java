@@ -25,32 +25,32 @@ public class SerializationTest {
     }
 
     private static void kryoSerialization() throws FileNotFoundException {
-        Kryo kryo = new Kryo();
+        var kryo = new Kryo();
         kryo.register(SessionData.class);
         kryo.register(SomeData.class);
         kryo.register(OtherData.class);
         kryo.register(HashMap.class);
 
-        SessionData sessionData = SessionData.create(1, 2);
+        var sessionData = SessionData.create(1, 2);
 
-        Output output = new Output(new FileOutputStream("kryo.bin"));
+        var output = new Output(new FileOutputStream("kryo.bin"));
         kryo.writeClassAndObject(output, sessionData);
         output.close();
 
     }
 
     private static void kryoSerializationCompressed() throws IOException {
-        Kryo kryo = new Kryo();
+        var kryo = new Kryo();
         kryo.register(SessionData.class);
         kryo.register(SomeData.class);
         kryo.register(OtherData.class);
         kryo.register(HashMap.class);
 
-        SessionData sessionData = SessionData.create(1, 2);
+        var sessionData = SessionData.create(1, 2);
 
-        FileOutputStream outputStream = new FileOutputStream("kryo.bin.gz");
-        GZIPOutputStream gzipOutputStream = new GZIPOutputStream(outputStream);
-        Output output = new Output(gzipOutputStream);
+        var outputStream = new FileOutputStream("kryo.bin.gz");
+        var gzipOutputStream = new GZIPOutputStream(outputStream);
+        var output = new Output(gzipOutputStream);
         kryo.writeClassAndObject(output, sessionData);
         output.close();
         outputStream.close();
@@ -58,19 +58,19 @@ public class SerializationTest {
     }
 
     private static void javaSerialization() throws IOException {
-        SessionData sessionData = SessionData.create(1, 2);
-        FileOutputStream fileOutputStream = new FileOutputStream("java_serialization.bin");
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        var sessionData = SessionData.create(1, 2);
+        var fileOutputStream = new FileOutputStream("java_serialization.bin");
+        var objectOutputStream = new ObjectOutputStream(fileOutputStream);
         objectOutputStream.writeObject(sessionData);
         objectOutputStream.flush();
         objectOutputStream.close();
     }
 
     private static void javaSerializationWithCompression() throws IOException {
-        SessionData sessionData = SessionData.create(1, 2);
-        FileOutputStream fileOutputStream = new FileOutputStream("java_serialization.bin.gz");
-        GZIPOutputStream gzip = new GZIPOutputStream(fileOutputStream);
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(gzip);
+        var sessionData = SessionData.create(1, 2);
+        var fileOutputStream = new FileOutputStream("java_serialization.bin.gz");
+        var gzip = new GZIPOutputStream(fileOutputStream);
+        var objectOutputStream = new ObjectOutputStream(gzip);
         objectOutputStream.writeObject(sessionData);
         objectOutputStream.flush();
         objectOutputStream.close();
@@ -82,13 +82,13 @@ public class SerializationTest {
         serializerConfig.setImplementation(new SessionDataSerializer());
 
         SerializationConfig serializationConfig = new SerializationConfig();
-        serializationConfig.addSerializerConfig(serializerConfig);
+//        serializationConfig.addSerializerConfig(serializerConfig);
 
         SessionData sessionData = SessionData.create(1, 2);
         SerializationService ss = new DefaultSerializationServiceBuilder().setConfig(serializationConfig).build();
         Data data = ss.toData(sessionData);
         byte[] bytes = data.toByteArray();
-        FileOutputStream fileOutputStream = new FileOutputStream("hazelcast_serialization.bin");
+        var fileOutputStream = new FileOutputStream("hazelcast_serialization.bin");
         fileOutputStream.write(bytes);
         fileOutputStream.flush();
         fileOutputStream.close();
