@@ -82,7 +82,7 @@ public class SerializationTest {
         serializerConfig.setImplementation(new SessionDataSerializer());
 
         SerializationConfig serializationConfig = new SerializationConfig();
-//        serializationConfig.addSerializerConfig(serializerConfig);
+        serializationConfig.addSerializerConfig(serializerConfig);
 
         SessionData sessionData = SessionData.create(1, 2);
         SerializationService ss = new DefaultSerializationServiceBuilder().setConfig(serializationConfig).build();
