@@ -4,7 +4,7 @@
            xsi:schemaLocation="http://www.hazelcast.com/schema/config
            http://www.hazelcast.com/schema/config/hazelcast-config-3.11.xsd">
     <group>
-        <name>dev</name>
+        <name>dev_2</name>
     </group>
     <properties>
         <property name="hazelcast.logging.type">slf4j</property>
@@ -15,15 +15,10 @@
     <serialization>
         <serializers>
             <!--<global-serializer override-java-serialization="true">-->
-                <!--common.KryoSerializer2-->
-            <!--</global-serializer>-->
-            <!--<global-serializer override-java-serialization="true">-->
                 <!--common.GlobalHazelcastKryoSerializer-->
             <!--</global-serializer>-->
-            <!--<global-serializer override-java-serialization="true">-->
-                <!--info.jerrinot.subzero.Serializer-->
-            <!--</global-serializer>-->
             <serializer type-class="common.SessionData" class-name="common.SessionDataSerializer" />
+            <serializer type-class="common.RoutingKeyAggregator" class-name="common.RoutingKeyAggregatorSerializer" />
        </serializers>
     </serialization>
     <network>
